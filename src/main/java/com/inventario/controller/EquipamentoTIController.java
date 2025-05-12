@@ -1,38 +1,39 @@
 package com.inventario.controller;
 
+import com.inventario.facade.SistemaInventarioFacade;
 import com.inventario.model.EquipamentoTI;
-import com.inventario.service.EquipamentoTIService;
+import com.inventario.service.CategoriaTIService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@RestController
-@RequestMapping("/equipamentos")
-public class EquipamentoTIController {
+@Controller
+public class EquipamentoController {
 
-    @Autowired
-    private EquipamentoTIService equipamentoTIService;
+    @Autowired private SistemaInventarioFacade sistemaFacade;
+    @Autowired private CategoriaTIService categoriaTIService;
 
-    @PostMapping
-    public void salvar(@RequestBody EquipamentoTI equipamento) {
-        equipamentoTIService.salvar(equipamento);
+    @GetMapping("/equipamentos-view")
+    public String listarEquipamentos(Model model) {
+        model.addAttribute("equipamentos", sistemaFacade.listarEquipamentos());
+        return "equipamentos";
     }
 
-    @GetMapping
-    public List<EquipamentoTI> listarTodos() {
-        return equipamentoTIService.listarTodos();
+    @GetMapping("/equipamentos/add")
+    public String formNovoEquipamento(Model model) {
+        model.addAttribute("equipamento", new EquipamentoTI());
+        model.addAttribute("categorias", categoriaTIService.listarTodos());
+        return "equipamento-form";
     }
 
-    @GetMapping("/{id}")
-    public EquipamentoTI buscarPorId(@PathVariable int id) {
-        return equipamentoTIService.buscarPorId(id);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deletar(@PathVariable int id) {
-        EquipamentoTI equipamento = equipamentoTIService.buscarPorId(id);
-        if (equipamento != null) {
-            equipamentoTIService.deletar(equipamento);
-        }
+    @PostMapping("/equipamentos/salvar")
+    public String salvarEquipamento(@ModelAttribute EquipamentoTI equipamento,
+                                    @RequestParam("localizacao") String localizacao) {
+        sistemaFacade.cadastrarEquipamentoComInventario(equipamento, localizacao);
+        return "redirect:/equipamentos-view";
     }
 }

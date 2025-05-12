@@ -1,38 +1,34 @@
 package com.inventario.controller;
 
+import com.inventario.facade.SistemaInventarioFacade;
 import com.inventario.model.Manutencao;
-import com.inventario.service.ManutencaoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
-@RestController
-@RequestMapping("/manutencoes")
+@Controller
 public class ManutencaoController {
 
-    @Autowired
-    private ManutencaoService manutencaoService;
+    @Autowired private SistemaInventarioFacade sistemaFacade;
 
-    @PostMapping
-    public void salvar(@RequestBody Manutencao manutencao) {
-        manutencaoService.salvar(manutencao);
+    @GetMapping("/manutencoes-view")
+    public String listarManutencoes(Model model) {
+        model.addAttribute("manutencoes", sistemaFacade.listarManutencoes());
+        return "manutencoes";
     }
 
-    @GetMapping
-    public List<Manutencao> listarTodos() {
-        return manutencaoService.listarTodos();
+    @GetMapping("/manutencoes/add")
+    public String formNovaManutencao(Model model) {
+        model.addAttribute("manutencao", new Manutencao());
+        return "manutencao-form";
     }
 
-    @GetMapping("/{id}")
-    public Manutencao buscarPorId(@PathVariable int id) {
-        return manutencaoService.buscarPorId(id);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deletar(@PathVariable int id) {
-        Manutencao manutencao = manutencaoService.buscarPorId(id);
-        if (manutencao != null) {
-            manutencaoService.deletar(manutencao);
-        }
+    @PostMapping("/manutencoes/salvar")
+    public String salvarManutencao(@ModelAttribute Manutencao manutencao) {
+        sistemaFacade.registrarManutencao(manutencao);
+        return "redirect:/manutencoes-view";
     }
 }

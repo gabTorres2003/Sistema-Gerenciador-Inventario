@@ -24,4 +24,52 @@ public class SistemaInventarioFacade {
     @Autowired private ReservaService reservaService;
     @Autowired private UsuarioService usuarioService;
     @Autowired private ManutencaoService manutencaoService;
+
+    // Equipamentos
+    public void cadastrarEquipamentoComInventario(EquipamentoTI equipamento, String localizacao) {
+        equipamentoTIService.salvar(equipamento);
+        Inventario inventario = new Inventario(0, equipamento, localizacao, 1);
+        inventario.setEquipamento(equipamento);
+        inventario.setLocalizacao(localizacao);
+        inventario.setQuantidadeDisponivel(1);
+        inventarioService.salvar(inventario);
+    }
+
+    public List<EquipamentoTI> listarEquipamentos() {
+        return equipamentoTIService.listarTodos();
+    }
+
+    // Reservas
+    public void solicitarReservaEquipamento(Reserva reserva) {
+        if (!"disponivel".equalsIgnoreCase(reserva.getEquipamento().getEstado())) {
+            throw new IllegalStateException("Equipamento indisponível");
+        }
+        reservaService.salvar(reserva);
+    }
+
+    public BigDecimal calcularMultaReserva(Reserva reserva) {
+        return BigDecimal.valueOf(reserva.calcularMultaAtraso());
+    }
+
+    public List<Reserva> listarReservas() {
+        return reservaService.listarTodos();
+    }
+
+    // Usuários
+    public void salvarUsuario(Usuario usuario) {
+        usuarioService.salvar(usuario);
+    }
+
+    public List<Usuario> listarUsuarios() {
+        return usuarioService.listarTodos();
+    }
+
+    // Manutenções
+    public void registrarManutencao(Manutencao manutencao) {
+        manutencaoService.salvar(manutencao);
+    }
+
+    public List<Manutencao> listarManutencoes() {
+        return manutencaoService.listarTodos();
+    }
 }

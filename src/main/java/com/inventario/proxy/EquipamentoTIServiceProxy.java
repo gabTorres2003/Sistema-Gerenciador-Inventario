@@ -1,8 +1,13 @@
-package com.inventario.service.proxy;
+package com.inventario.proxy;
+
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
 
 import com.inventario.model.EquipamentoTI;
 import com.inventario.service.EquipamentoTIService;
 
+@Service
+@Primary
 public class EquipamentoTIServiceProxy implements EquipamentoTIService {
 
     private final EquipamentoTIService equipamentoTIService;

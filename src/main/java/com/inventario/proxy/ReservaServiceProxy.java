@@ -1,8 +1,13 @@
-package com.inventario.service.proxy;
+package com.inventario.proxy;
+
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
 
 import com.inventario.model.Reserva;
 import com.inventario.service.ReservaService;
 
+@Service
+@Primary
 public class ReservaServiceProxy implements ReservaService {
 
     private final ReservaService reservaService;

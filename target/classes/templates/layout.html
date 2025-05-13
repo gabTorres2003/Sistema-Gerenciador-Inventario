@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #0f172a;
+        color: white;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+      }
+      h1 {
+        margin-bottom: 20px;
+      }
+      .card {
+        background-color: #1e293b;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+      }
+      .select-wrapper {
+        margin-bottom: 20px;
+      }
+      select,
+      .btn {
+        padding: 10px;
+        border-radius: 6px;
+        border: none;
+        font-size: 14px;
+      }
+      .btn {
+        background-color: #38bdf8;
+        color: white;
+        margin-left: 10px;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background-color: #0ea5e9;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Dashboard</h1>
+
+    <div class="card">
+      <p>
+        <strong>Total de Equipamentos:</strong>
+        <span th:text="${totalEquipamentos}"></span>
+      </p>
+      <p>
+        <strong>Em Manutenção:</strong> <span th:text="${emManutencao}"></span>
+      </p>
+      <p>
+        <strong>Disponíveis:</strong> <span th:text="${disponiveis}"></span>
+      </p>
+      <p><strong>Alocados:</strong> <span th:text="${alocados}"></span></p>
+    </div>
+
+    <div class="card">
+      <form method="get" action="/dashboard" class="select-wrapper">
+        <label for="tipo">Selecionar Relatório:</label>
+        <select id="tipo" name="tipo">
+          <option value="relatorioReservasAtivas">Reservas Ativas</option>
+          <option value="relatorioPorDepartamento">Por Departamento</option>
+        </select>
+        <button type="submit" class="btn">Exibir</button>
+      </form>
+
+      <p><strong>Relatório:</strong></p>
+      <div th:text="${relatorio}"></div>
+    </div>
+  </body>
+</html>

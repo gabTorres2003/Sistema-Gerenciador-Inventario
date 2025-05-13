@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Novo Equipamento</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        background-color: #0f172a;
+        color: white;
+        font-family: Arial, sans-serif;
+      }
+
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 220px;
+        height: 100vh;
+        background-color: #1e293b;
+        padding-top: 20px;
+      }
+
+      .sidebar h2 {
+        color: #38bdf8;
+        text-align: center;
+      }
+
+      .sidebar a {
+        display: block;
+        padding: 15px 20px;
+        color: #cbd5e1;
+        text-decoration: none;
+      }
+
+      .sidebar a:hover {
+        background-color: #334155;
+      }
+
+      .main {
+        margin-left: 220px;
+        padding: 20px;
+      }
+
+      form {
+        background-color: #1e293b;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 600px;
+      }
+
+      label {
+        display: block;
+        margin-top: 15px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: none;
+        border-radius: 5px;
+      }
+
+      .btn {
+        background-color: #38bdf8;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+
+      .btn:hover {
+        background-color: #0ea5e9;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <h2>EquipTrack</h2>
+      <a href="/dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
+      <a href="/equipamentos-view"
+        ><i class="fas fa-qrcode"></i> Equipamentos</a
+      >
+      <a href="/usuarios-view"><i class="fas fa-users"></i> Usuários</a>
+    </div>
+
+    <div class="main">
+      <h1>Novo Equipamento</h1>
+
+      <form
+        th:action="@{/equipamentos/salvar}"
+        method="post"
+        th:object="${equipamento}"
+      >
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" th:field="*{nome}" required />
+
+        <label for="numeroSerie">Número de Série:</label>
+        <input
+          type="text"
+          id="numeroSerie"
+          th:field="*{numeroSerie}"
+          required
+        />
+
+        <label for="estado">Estado:</label>
+        <select id="estado" th:field="*{estado}">
+          <option value="disponivel">Disponível</option>
+          <option value="manutencao">Em Manutenção</option>
+          <option value="alocado">Alocado</option>
+        </select>
+
+        <label for="localizacao">Localização:</label>
+        <input type="text" id="localizacao" th:field="*{localizacao}" />
+
+        <label for="categoria">Categoria:</label>
+        <select id="categoria" th:field="*{categoria.idCategoria}">
+          <option
+            th:each="cat : ${categorias}"
+            th:value="${cat.idCategoria}"
+            th:text="${cat.nome}"
+          ></option>
+        </select>
+
+        <button type="submit" class="btn">
+          <i class="fas fa-save"></i> Salvar
+        </button>
+      </form>
+    </div>
+  </body>
+</html>
